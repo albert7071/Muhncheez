@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muhn Cheez — Melipilla</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #111010;
+    --white: #FAFAF7;
+    --orange: #FF6B1A;
+    --orange-dark: #D9530E;
+    --orange-pale: #FFF1E8;
+    --gray-100: #F5F5F2;
+    --gray-200: #E8E8E4;
+    --gray-400: #AEADA8;
+    --gray-600: #6B6A66;
+    --gray-800: #2E2D2A;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--white);
+    color: var(--black);
+    overflow-x: hidden;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--orange); }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 3rem;
+    height: 68px;
+    background: var(--black);
+    border-bottom: 1px solid rgba(255,107,26,0.25);
+    transition: height 0.3s;
+  }
+  nav.scrolled { height: 56px; }
+
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.03em;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--orange); }
+
+  .nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  .nav-links a {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--orange);
+    color: var(--white);
+    padding: 0.55rem 1.4rem;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--orange-dark); }
+
+  /* HAMBURGER */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 1.5px;
+    background: var(--white);
+    transition: all 0.3s;
+  }
+
+  /* MOBILE MENU */
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 68px; left: 0; right: 0;
+    background: var(--black);
+    padding: 2rem 2rem 2.5rem;
+    z-index: 999;
+    border-bottom: 1px solid rgba(255,107,26,0.2);
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 68px;
+  }
+
+  .hero-left {
+    background: var(--black);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5rem 4rem 5rem 3.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 300px; height: 300px;
+    background: var(--orange);
+    opacity: 0.04;
+    border-radius: 50%;
+  }
+
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--orange);
+  }
+  .hero-eyebrow span {
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--orange);
+    font-weight: 500;
+  }
+
+  .hero-h1 {
+    font-family: var(--serif);
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    font-weight: 900;
+    line-height: 0.95;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.35s forwards;
+  }
+  .hero-h1 em {
+    color: var(--orange);
+    font-style: italic;
+  }
+
+  .hero-desc {
+    font-size: 0.95rem;
+    color: var(--gray-400);
+    line-height: 1.75;
+    max-width: 320px;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.5s forwards;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.65s forwards;
+  }
+
+  .btn-primary {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--orange);
+    color: var(--white);
+    padding: 0.85rem 2rem;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); }
+
+  .btn-secondary {
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--white);
+    padding: 0.85rem 2rem;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: border-color 0.2s, color 0.2s;
+    display: inline-block;
+  }
+  .btn-secondary:hover { border-color: var(--white); color: var(--orange); }
+
+  .hero-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+  .stars { color: var(--orange); font-size: 0.9rem; letter-spacing: 0.05em; }
+  .rating-label { font-size: 0.8rem; color: var(--gray-600); }
+  .rating-score { font-family: var(--serif); font-size: 1.1rem; color: var(--white); font-weight: 700; }
+
+  .hero-right {
+    background: var(--gray-100);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2.5rem;
+    gap: 1.5rem;
+    position: relative;
+  }
+
+  .hero-img-main {
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 4/3;
+    background: var(--gray-200);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .img-placeholder-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--gray-400);
+  }
+  .img-placeholder-icon svg { opacity: 0.4; }
+  .img-placeholder-icon span {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .hero-img-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    width: 100%;
+    max-width: 420px;
+  }
+  .hero-img-small {
+    aspect-ratio: 3/2;
+    background: var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-tag-float {
+    position: absolute;
+    bottom: 3rem;
+    right: 2.5rem;
+    background: var(--orange);
+    color: var(--white);
+    padding: 0.6rem 1.1rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* ── ABOUT ── */
+  .about {
+    padding: 7rem 3.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.2rem;
+  }
+  .section-eyebrow::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--orange);
+  }
+  .section-eyebrow span {
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--orange);
+    font-weight: 500;
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--black);
+    margin-bottom: 1.5rem;
+  }
+  .section-title em { color: var(--orange); font-style: italic; }
+
+  .about-text p {
+    font-size: 0.95rem;
+    color: var(--gray-600);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    font-weight: 300;
+  }
+
+  .about-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+  .tag {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.9rem;
+    border: 1px solid var(--gray-200);
+    color: var(--gray-600);
+  }
+  .tag.orange { border-color: var(--orange); color: var(--orange); }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--gray-200);
+    border: 1px solid var(--gray-200);
+  }
+  .stat-cell {
+    background: var(--white);
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .stat-cell.dark { background: var(--black); }
+  .stat-num {
+    font-family: var(--serif);
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: var(--orange);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+  }
+  .stat-cell.dark .stat-label { color: var(--gray-600); }
+  .stat-wide {
+    grid-column: span 2;
+    background: var(--black);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .stat-wide .stat-num { font-size: 1.8rem; }
+  .stat-wide .stat-label { color: var(--gray-600); }
+
+  /* ── MENU ── */
+  .menu-section {
+    background: var(--black);
+    padding: 7rem 3.5rem;
+  }
+  .menu-header {
+    max-width: 1200px;
+    margin: 0 auto 3.5rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .menu-header .section-title { color: var(--white); margin-bottom: 0; }
+  .menu-header .section-eyebrow::before { background: var(--orange); }
+
+  .menu-see-all {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--orange);
+    text-decoration: none;
+    border-bottom: 1px solid var(--orange);
+    padding-bottom: 2px;
+    white-space: nowrap;
+    align-self: flex-end;
+    transition: opacity 0.2s;
+  }
+  .menu-see-all:hover { opacity: 0.7; }
+
+  .menu-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    background: #1A1A1A;
+  }
+
+  .menu-card {
+    background: #111010;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.25s;
+    cursor: default;
+  }
+  .menu-card:hover { background: #181818; }
+
+  .menu-img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: #1E1E1E;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .menu-img::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--orange);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .menu-card:hover .menu-img::after { transform: scaleX(1); }
+
+  .menu-badge {
+    display: inline-block;
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    margin-bottom: 0.6rem;
+    align-self: flex-start;
+  }
+  .menu-badge.orange { background: var(--orange); color: var(--white); }
+  .menu-badge.outline { border: 1px solid #333; color: var(--gray-600); }
+
+  .menu-name {
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+  .menu-desc {
+    font-size: 0.82rem;
+    color: var(--gray-600);
+    line-height: 1.65;
+    font-weight: 300;
+    flex: 1;
+  }
+
+  /* ── PATIO / AMBIENCE ── */
+  .ambience {
+    padding: 7rem 3.5rem;
+    background: var(--orange-pale);
+  }
+  .ambience-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  .ambience-imgs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .ambience-img {
+    background: var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ambience-img.tall { grid-row: span 2; aspect-ratio: 3/4; }
+  .ambience-img.short { aspect-ratio: 4/3; }
+
+  .ambience-text p {
+    font-size: 0.95rem;
+    color: var(--gray-600);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    font-weight: 300;
+  }
+  .ambience-features {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .feature-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--gray-800);
+    font-weight: 400;
+  }
+  .feature-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--orange);
+    flex-shrink: 0;
+  }
+
+  /* ── REVIEWS ── */
+  .reviews {
+    padding: 7rem 3.5rem;
+    background: var(--white);
+  }
+  .reviews-header {
+    max-width: 1200px;
+    margin: 0 auto 3.5rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .reviews-aggregate {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 2px;
+  }
+  .reviews-score {
+    font-family: var(--serif);
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--orange);
+    line-height: 1;
+  }
+  .reviews-meta { display: flex; flex-direction: column; gap: 2px; }
+  .reviews-stars { color: var(--orange); font-size: 0.9rem; letter-spacing: 0.05em; }
+  .reviews-count { font-size: 0.75rem; color: var(--gray-400); font-weight: 400; }
+
+  .reviews-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .review-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .review-card:hover { border-color: var(--orange); transform: translateY(-3px); }
+
+  .review-top { display: flex; align-items: center; justify-content: space-between; }
+  .review-stars { color: var(--orange); font-size: 0.85rem; letter-spacing: 0.05em; }
+  .review-date { font-size: 0.72rem; color: var(--gray-400); }
+
+  .review-quote-mark {
+    font-family: var(--serif);
+    font-size: 3.5rem;
+    color: var(--orange);
+    opacity: 0.25;
+    line-height: 0.5;
+    margin-bottom: 0.5rem;
+  }
+
+  .review-text {
+    font-size: 0.88rem;
+    color: var(--gray-800);
+    line-height: 1.75;
+    font-style: italic;
+    font-family: var(--serif);
+    flex: 1;
+  }
+
+  .review-author {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--black);
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--gray-200);
+  }
+  .review-guide {
+    font-size: 0.68rem;
+    color: var(--orange);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* ── CONTACT ── */
+  .contact {
+    background: var(--black);
+    padding: 7rem 3.5rem;
+  }
+  .contact-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 5rem;
+  }
+  .contact .section-title { color: var(--white); }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem 3rem;
+    margin-top: 2rem;
+  }
+  .contact-block h4 {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 0.75rem;
+  }
+  .contact-block p, .contact-block a {
+    font-size: 0.9rem;
+    color: var(--gray-400);
+    line-height: 1.75;
+    font-weight: 300;
+    text-decoration: none;
+    display: block;
+    transition: color 0.2s;
+  }
+  .contact-block a:hover { color: var(--white); }
+
+  .hours-list { display: flex; flex-direction: column; }
+  .hours-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid #1E1E1E;
+    font-size: 0.85rem;
+  }
+  .hours-row:last-child { border-bottom: none; }
+  .hours-day { color: var(--gray-600); }
+  .hours-time { color: var(--white); font-weight: 400; }
+
+  .services-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+  .service-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--gray-400);
+  }
+  .service-dot {
+    width: 5px;
+    height: 5px;
+    background: var(--orange);
+    flex-shrink: 0;
+  }
+
+  .open-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255,107,26,0.1);
+    border: 1px solid rgba(255,107,26,0.25);
+    color: var(--orange);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.85rem;
+    margin-bottom: 0.75rem;
+  }
+  .open-dot {
+    width: 5px;
+    height: 5px;
+    background: var(--orange);
+    border-radius: 50%;
+  }
+
+  .contact-map {
+    background: #1A1A1A;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #222;
+  }
+  .map-footer {
+    padding: 1.25rem 1.5rem;
+    background: #1A1A1A;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #222;
+  }
+  .map-address { font-size: 0.82rem; color: var(--gray-600); }
+  .map-link {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--orange);
+    text-decoration: none;
+    border-bottom: 1px solid var(--orange);
+    padding-bottom: 1px;
+    transition: opacity 0.2s;
+  }
+  .map-link:hover { opacity: 0.7; }
+
+  /* ── WHATSAPP FLOTANTE ── */
+  .whatsapp-float {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #25D366;
+    color: #fff;
+    padding: 0.85rem 1.4rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-family: var(--sans);
+    font-size: 0.82rem;
+    font-weight: 500;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .whatsapp-float:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(37,211,102,0.5);
+  }
+  .whatsapp-float svg { flex-shrink: 0; }
+
+  /* ── BOTÓN MENÚ COMPLETO ── */
+  .menu-cta-banner {
+    max-width: 1200px;
+    margin: 2rem auto 0;
+    background: var(--orange);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 2.5rem;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .menu-cta-banner:hover { background: var(--orange-dark); }
+  .menu-cta-banner span {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    color: #fff;
+    font-weight: 700;
+  }
+  .menu-cta-banner div {
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #0A0A09;
+    padding: 2.5rem 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #1A1A1A;
+  }
+  .footer-logo {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--white);
+  }
+  .footer-logo span { color: var(--orange); }
+  .footer-copy { font-size: 0.75rem; color: var(--gray-600); }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-600);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--orange); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 0 1.5rem; }
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 3.5rem 2rem; }
+    .hero-right { display: none; }
+
+    .about { grid-template-columns: 1fr; gap: 2.5rem; padding: 4rem 2rem; }
+    .about-stats { grid-template-columns: 1fr 1fr; }
+
+    .menu-section { padding: 4rem 2rem; }
+    .menu-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .menu-grid { grid-template-columns: 1fr; }
+
+    .ambience { padding: 4rem 2rem; }
+    .ambience-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    .ambience-imgs { grid-template-columns: 1fr 1fr; }
+    .ambience-img.tall { aspect-ratio: 4/3; grid-row: span 1; }
+
+    .reviews { padding: 4rem 2rem; }
+    .reviews-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .reviews-grid { grid-template-columns: 1fr; }
+
+    .contact { padding: 4rem 2rem; }
+    .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .contact-grid { grid-template-columns: 1fr; }
+
+    footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem; }
+  }
+
+  @media (max-width: 600px) {
+    .menu-grid { gap: 1px; }
+    .ambience-imgs { grid-template-columns: 1fr; }
+    .stat-wide { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#inicio" class="nav-logo">Muhn <span>Cheez</span></a>
+  <ul class="nav-links">
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#menu">Menú</a></li>
+    <li><a href="#ambiente">Ambiente</a></li>
+    <li><a href="#opiniones">Opiniones</a></li>
+    <li><a href="#contacto" class="nav-cta">Contacto</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" aria-label="Menú" role="button" tabindex="0">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#nosotros" class="mobile-link">Nosotros</a>
+  <a href="#menu" class="mobile-link">Menú</a>
+  <a href="#ambiente" class="mobile-link">Ambiente</a>
+  <a href="#opiniones" class="mobile-link">Opiniones</a>
+  <a href="#contacto" class="mobile-link">Contacto</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-left">
+    <div class="hero-eyebrow"><span>Melipilla · Serrano 838</span></div>
+    <h1 class="hero-h1">El mejor<br>sabor de<br><em>Melipilla.</em></h1>
+    <p class="hero-desc">Burgers contundentes, papas coreanas irresistibles y un patio interior que te va a conquistar. Desde el corazón de Melipilla.</p>
+    <div class="hero-btns">
+      <a href="#menu" class="btn-primary">Ver el Menú</a>
+      <a href="#contacto" class="btn-secondary">Cómo Llegar</a>
+    </div>
+    <div class="hero-rating">
+      <span class="rating-score">4.8</span>
+      <div>
+        <div class="stars">★★★★★</div>
+        <div class="rating-label">133 opiniones en Google</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img-main">
+      <div class="img-placeholder-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>Foto del local</span>
+      </div>
+    </div>
+    <div class="hero-img-row">
+      <div class="hero-img-small">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      </div>
+      <div class="hero-img-small">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      </div>
+    </div>
+    <div class="hero-tag-float">Abierto hoy · Hasta 11 pm</div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="nosotros" style="background: var(--white); padding: 7rem 3.5rem;">
+  <div class="about">
+    <div class="about-text reveal">
+      <div class="section-eyebrow"><span>Quiénes somos</span></div>
+      <h2 class="section-title">Un lugar que<br>te <em>sorprende.</em></h2>
+      <p>Por fuera es piola, pero al entrar se abre un mundo diferente. Ambiente grato, un patio interior precioso y una carta que mezcla lo mejor de las hamburguesas con influencias de la cocina coreana y mexicana.</p>
+      <p>Comida bien contundente, ingredientes de calidad y un servicio siempre cerca y atento. La calidad está muy por encima de lo que esperás encontrar.</p>
+      <div class="about-tags">
+        <span class="tag orange">Hamburguesas</span>
+        <span class="tag orange">Cocina Coreana</span>
+        <span class="tag">Toque Mexicano</span>
+        <span class="tag">Patio Interior</span>
+        <span class="tag">Para llevar</span>
+        <span class="tag">Delivery</span>
+      </div>
+    </div>
+    <div class="reveal reveal-delay-2">
+      <div class="about-stats">
+        <div class="stat-cell">
+          <div class="stat-num">4.8</div>
+          <div class="stat-label">Calificación Google</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num">133</div>
+          <div class="stat-label">Opiniones</div>
+        </div>
+        <div class="stat-wide">
+          <div>
+            <div class="stat-num" style="font-size:1.7rem; color: var(--orange);">$10.000 – $15.000</div>
+            <div class="stat-label">Precio por persona</div>
+          </div>
+          <div style="font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray-600); text-align: right;">Informado<br>por 41 personas</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu" class="menu-section">
+  <div class="menu-header reveal">
+    <div>
+      <div class="section-eyebrow"><span>Destacados del menú</span></div>
+      <h2 class="section-title" style="color:var(--white);">Lo que no te<br>podés <em style="color:var(--orange)">perder.</em></h2>
+    </div>
+    <a href="#contacto" class="menu-see-all">Consultar carta completa</a>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-card reveal">
+      <div class="menu-img">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      </div>
+      <span class="menu-badge orange">Favorito</span>
+      <div class="menu-name">Sandwich Farkas</div>
+      <div class="menu-desc">La burger estrella de la casa. Contundente, jugosa y llena de personalidad. Un bocado que no olvidarás.</div>
+    </div>
+    <div class="menu-card reveal reveal-delay-1">
+      <div class="menu-img">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      </div>
+      <span class="menu-badge orange">Muy pedido</span>
+      <div class="menu-name">Papas Fritas Coreanas</div>
+      <div class="menu-desc">Papas con sazón coreana que te dejan con ganas de más. El acompañamiento perfecto para cualquier burger.</div>
+    </div>
+    <div class="menu-card reveal reveal-delay-2">
+      <div class="menu-img">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      </div>
+      <span class="menu-badge outline">Postre estrella</span>
+      <div class="menu-name">Brazo de Reina con Maracuyá</div>
+      <div class="menu-desc">Un clásico chileno reinterpretado con una generosa salsa de maracuyá que sorprende en cada cucharada.</div>
+    </div>
+    <div class="menu-card reveal">
+      <div class="menu-img">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      </div>
+      <span class="menu-badge outline">Crujiente</span>
+      <div class="menu-name">Chicken Fingers</div>
+      <div class="menu-desc">Tiras de pollo crujientes, doradas y sabrosas. Perfectas para compartir o como entrada irresistible.</div>
+    </div>
+    <div class="menu-card reveal reveal-delay-1">
+      <div class="menu-img">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      </div>
+      <span class="menu-badge outline">Sabor mexicano</span>
+      <div class="menu-name">Chapu</div>
+      <div class="menu-desc">El toque mexicano de la carta. Sabores vibrantes, especias bien balanceadas y mucha personalidad en cada mordida.</div>
+    </div>
+    <div class="menu-card reveal reveal-delay-2">
+      <div class="menu-img">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      </div>
+      <span class="menu-badge outline">Bebida</span>
+      <div class="menu-name">Bublé Café</div>
+      <div class="menu-desc">Café especial para cerrar la experiencia Muhn Cheez como se merece. Aromático y cremoso.</div>
+    </div>
+  </div>
+  <a href="https://menu.fu.do/muhncheez/qr-menu" target="_blank" class="menu-cta-banner reveal">
+    <span>Ver la carta completa →</span>
+    <div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Menú digital actualizado
+    </div>
+  </a>
+</section>
+
+<!-- AMBIENCE -->
+<section id="ambiente" class="ambience">
+  <div class="ambience-inner">
+    <div class="ambience-imgs reveal">
+      <div class="ambience-img tall">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      </div>
+      <div class="ambience-img short">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      </div>
+      <div class="ambience-img short">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      </div>
+    </div>
+    <div class="ambience-text reveal reveal-delay-2">
+      <div class="section-eyebrow"><span>El ambiente</span></div>
+      <h2 class="section-title">Un patio interior<br>que te <em>enamora.</em></h2>
+      <p>Por fuera puede parecer un local más, pero al cruzar la puerta la historia cambia. Un ambiente cálido y grato, con un patio interior que convierte cada visita en una experiencia especial.</p>
+      <p>Ideal para compartir en familia o con amigos, con una decoración que transmite calidez sin perder el carácter urbano que define a Muhn Cheez.</p>
+      <div class="ambience-features">
+        <div class="feature-row"><div class="feature-dot"></div><span>Patio interior con mesas al aire libre</span></div>
+        <div class="feature-row"><div class="feature-dot"></div><span>Ambiente grato y cálido</span></div>
+        <div class="feature-row"><div class="feature-dot"></div><span>Servicio atento y cercano</span></div>
+        <div class="feature-row"><div class="feature-dot"></div><span>Capacidad para grupos y familias</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="opiniones" class="reviews">
+  <div class="reviews-header reveal">
+    <div>
+      <div class="section-eyebrow"><span>Opiniones</span></div>
+      <h2 class="section-title">Lo que dice<br>la <em>gente.</em></h2>
+    </div>
+    <div class="reviews-aggregate">
+      <div class="reviews-score">4.8</div>
+      <div class="reviews-meta">
+        <div class="reviews-stars">★★★★★</div>
+        <div class="reviews-count">133 opiniones en Google Maps</div>
+      </div>
+    </div>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card reveal">
+      <div class="review-top">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-date">Hace 3 meses</div>
+      </div>
+      <div class="review-quote-mark">&ldquo;</div>
+      <p class="review-text">Buenísimo lugar, me sorprendió. Por fuera es muy piola, pero adentro el ambiente es muy grato y tienen un patio interior muy lindo. La carta es variada en hamburguesas y con tendencia a la comida mexicana.</p>
+      <div>
+        <div class="review-author">Nicole Conde</div>
+        <div class="review-guide">Guía Local · 35 reseñas</div>
+      </div>
+    </div>
+    <div class="review-card reveal reveal-delay-1">
+      <div class="review-top">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-date">Hace 2 meses</div>
+      </div>
+      <div class="review-quote-mark">&ldquo;</div>
+      <p class="review-text">Vinimos buscando nuestro nuevo lugar de burgers y lo encontramos. La comida bien contundente y las papas están de más. Muy rico todo, el servicio siempre cerca y atento.</p>
+      <div>
+        <div class="review-author">Maximo Barrales</div>
+        <div class="review-guide">2 reseñas</div>
+      </div>
+    </div>
+    <div class="review-card reveal reveal-delay-2">
+      <div class="review-top">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-date">Hace 2 meses</div>
+      </div>
+      <div class="review-quote-mark">&ldquo;</div>
+      <p class="review-text">Excelente lugar, muy recomendable. La calidad de la comida es muy superior a otros lados. Sin duda uno de los mejores restaurantes de Melipilla.</p>
+      <div>
+        <div class="review-author">Enrique Mallea</div>
+        <div class="review-guide">Guía Local · 34 reseñas</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contacto" class="contact">
+  <div class="contact-inner">
+    <div class="reveal">
+      <div class="section-eyebrow" style="margin-bottom:1.2rem"><span style="color:var(--orange)">Encuéntranos</span></div>
+      <h2 class="section-title" style="color:var(--white); margin-bottom:2rem;">Visítanos en<br><em>Melipilla.</em></h2>
+      <div class="contact-grid">
+        <div class="contact-block">
+          <h4>Dirección</h4>
+          <p>Serrano 838<br>Melipilla<br>Región Metropolitana</p>
+        </div>
+        <div class="contact-block">
+          <h4>Teléfono</h4>
+          <a href="tel:+56940494705">+56 9 4049 4705</a>
+          <h4 style="margin-top:1.25rem">Instagram</h4>
+          <a href="https://www.instagram.com/muhn_cheez_chile/" target="_blank" style="color:var(--orange)">@muhn_cheez_chile</a>
+        </div>
+        <div class="contact-block">
+          <h4>Horarios</h4>
+          <div class="open-badge"><span class="open-dot"></span> Abierto ahora</div>
+          <div class="hours-list">
+            <div class="hours-row"><span class="hours-day">Lun – Jue</span><span class="hours-time">Hasta 11 pm</span></div>
+            <div class="hours-row"><span class="hours-day">Vie – Sáb</span><span class="hours-time">Hasta 11 pm</span></div>
+            <div class="hours-row"><span class="hours-day">Domingo</span><span class="hours-time">Consultar</span></div>
+          </div>
+        </div>
+        <div class="contact-block">
+          <h4>Servicios</h4>
+          <div class="services-list">
+            <div class="service-item"><div class="service-dot"></div><span>Consumo en el lugar</span></div>
+            <div class="service-item"><div class="service-dot"></div><span>Para llevar</span></div>
+            <div class="service-item"><div class="service-dot"></div><span>Entrega a domicilio</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-map reveal reveal-delay-2">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3330.7!2d-71.2127!3d-33.6896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c0e0e0e0e0e1%3A0x1!2sSerrano+838%2C+Melipilla%2C+Regi%C3%B3n+Metropolitana!5e0!3m2!1ses!2scl!4v1700000000000!5m2!1ses!2scl"
+        width="100%"
+        height="300"
+        style="border:0; display:block; filter: grayscale(20%) contrast(1.05);"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Ubicación Muhn Cheez en Google Maps">
+      </iframe>
+      <div class="map-footer">
+        <span class="map-address">Serrano 838, Melipilla</span>
+        <a href="https://maps.google.com/?q=Muhn+Cheez+Serrano+838+Melipilla" target="_blank" class="map-link">Abrir en Maps →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Muhn <span>Cheez</span></div>
+  <div class="footer-copy">© 2025 Muhn Cheez · Serrano 838, Melipilla</div>
+  <div class="footer-links">
+    <a href="#inicio">Inicio</a>
+    <a href="#menu">Menú</a>
+    <a href="#contacto">Contacto</a>
+    <a href="https://www.instagram.com/muhn_cheez_chile/" target="_blank">Instagram</a>
+  </div>
+</footer>
+
+<!-- WHATSAPP FLOTANTE -->
+<a href="https://wa.me/56940494705?text=Hola%2C%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n%20sobre%20Muhn%20Cheez" target="_blank" class="whatsapp-float" aria-label="Contactar por WhatsApp">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.116 1.529 5.845L.057 23.855a.75.75 0 0 0 .918.918l6.01-1.472A11.955 11.955 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.75 9.75 0 0 1-4.964-1.355l-.355-.213-3.684.902.92-3.593-.233-.372A9.75 9.75 0 1 1 12 21.75z"/></svg>
+  Escríbenos
+</a>
+
+<script>
+  // NAV scroll effect
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // HAMBURGER
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+  });
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  });
+
+  // REVEAL on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
